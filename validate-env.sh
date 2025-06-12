@@ -22,4 +22,8 @@ else
 fi
 
 echo "MJ_API_SECRET: ${MJ_API_SECRET:+SET}"
+<<<<<<< HEAD
 echo "=== Starting Application ===" 
+=======
+echo "=== Starting Application ==="
+>>>>>>> 06dea98822c7c2572ab34721d4df3cecd1b1ebf3

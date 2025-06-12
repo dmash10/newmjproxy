@@ -26,11 +26,15 @@ mj:
 # Server settings - Railway uses PORT environment variable
 server:
   port: "${PORT:8080}"
+  servlet:
+    context-path: /mj
   
 # Spring settings
 spring:
   profiles:
     active: "${SPRING_PROFILES_ACTIVE:railway}"
+  main:
+    allow-bean-definition-overriding: true
 
 ---
 # Railway-specific profile
@@ -42,6 +46,8 @@ spring:
 # Railway optimizations
 server:
   port: "${PORT:8080}"
+  servlet:
+    context-path: /mj
   tomcat:
     max-threads: 200
     min-spare-threads: 10
@@ -51,8 +57,8 @@ server:
 # Logging configuration for Railway
 logging:
   level:
-    root: "${LOGGING_LEVEL_ROOT:INFO}"
-    com.github.novicezk: "${LOGGING_LEVEL_MIDJOURNEY:INFO}"
+    root: INFO
+    com.github.novicezk: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
@@ -61,7 +67,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info
       base-path: /actuator
   endpoint:
     health:
@@ -69,3 +75,8 @@ management:
   health:
     diskspace:
       enabled: false
+
+# Disable knife4j documentation
+knife4j:
+  enable: false
+  production: true

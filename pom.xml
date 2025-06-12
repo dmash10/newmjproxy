@@ -20,7 +20,6 @@
         <jda.version>5.0.0-beta.21</jda.version>
         <chatgpt-java.version>1.1.5</chatgpt-java.version>
         <dataurl.version>2.0.0</dataurl.version>
-        <knife4j.verison>4.1.0</knife4j.verison>
         <user-agent-utils.verison>1.21</user-agent-utils.verison>
         <httpclient.verison>4.5.14</httpclient.verison>
         <java.version>17</java.version>
@@ -93,11 +92,14 @@
             <artifactId>dataurl</artifactId>
             <version>${dataurl.version}</version>
         </dependency>
+        
+        <!-- ONLY Swagger annotations for compilation - NO auto-configuration -->
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
-            <version>${knife4j.verison}</version>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.6.2</version>
         </dependency>
+        
         <dependency>
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
@@ -131,7 +133,6 @@
                 </configuration>
             </plugin>
             
-            <!-- Maven Compiler Plugin for Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -143,7 +144,6 @@
                 </configuration>
             </plugin>
             
-            <!-- Skip tests during build for faster Railway deployment -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
