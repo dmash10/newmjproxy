@@ -5,11 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import spring.config.BeanConfig;
+import spring.config.CorsConfig;
 import spring.config.WebMvcConfig;
 
 @EnableScheduling
 @SpringBootApplication
-@Import({BeanConfig.class, WebMvcConfig.class})
+@Import({BeanConfig.class, WebMvcConfig.class, CorsConfig.class})
 public class ProxyApplication {
 
 	public static void main(String[] args) {

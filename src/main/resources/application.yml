@@ -35,6 +35,14 @@ spring:
     active: "${SPRING_PROFILES_ACTIVE:railway}"
   main:
     allow-bean-definition-overriding: true
+  # Nuclear CORS Configuration
+  web:
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "*"
+      allowed-headers: "*"
+      allow-credentials: true
+      max-age: 86400
 
 ---
 # Railway-specific profile
