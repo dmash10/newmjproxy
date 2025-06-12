@@ -38,8 +38,10 @@ public class ApiAuthorizeInterceptor implements HandlerInterceptor {
 		
 		if (!authorized) {
 			log.warn("❌ API Authorization FAILED - Expected: [{}], Received: [{}]", 
-				expectedSecret != null ? "***" : "NULL", 
-				apiSecret != null ? "***" : "NULL");
+				expectedSecret, apiSecret);
+			log.warn("🔍 DEBUG - Expected length: {}, Received length: {}", 
+				expectedSecret != null ? expectedSecret.length() : 0,
+				apiSecret != null ? apiSecret.length() : 0);
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		} else {
 			log.info("✅ API Authorization SUCCESS");
