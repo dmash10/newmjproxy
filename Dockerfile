@@ -1,5 +1,5 @@
 # Multi-stage build for Railway optimization
-FROM maven:3.8.5-openjdk-17-slim AS builder
+FROM maven:3.9.5-eclipse-temurin-17-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -16,24 +16,21 @@ COPY src ./src
 # Build the application
 RUN mvn clean package -DskipTests -B
 
-# Runtime stage with smaller JRE image
-FROM openjdk:17-jre-slim
+# Runtime stage with smaller JRE image - Using Eclipse Temurin
+FROM eclipse-temurin:17-jre-alpine
 
 # Install necessary packages for Railway
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl
 
 # Create application user
 ARG user=spring
 ARG group=spring
 ENV SPRING_HOME=/app
 
-RUN groupadd -g 1000 ${group} \
-    && useradd -d "$SPRING_HOME" -u 1000 -g 1000 -m -s /bin/bash ${user} \
-    && mkdir -p $SPRING_HOME/config \
-    && mkdir -p $SPRING_HOME/logs \
-    && chown -R ${user}:${group} $SPRING_HOME
+RUN addgroup -g 1000 ${group} && \
+    adduser -u 1000 -G ${group} -h "$SPRING_HOME" -s /bin/sh -D ${user} && \
+    mkdir -p $SPRING_HOME/config $SPRING_HOME/logs && \
+    chown -R ${user}:${group} $SPRING_HOME
 
 USER ${user}
 WORKDIR $SPRING_HOME
