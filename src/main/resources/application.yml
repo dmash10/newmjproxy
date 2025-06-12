@@ -27,10 +27,15 @@ mj:
 server:
   port: "${PORT:8080}"
   
-# Spring settings
+# Spring settings - CRITICAL FIX HERE
 spring:
   profiles:
     active: "${SPRING_PROFILES_ACTIVE:railway}"
+  main:
+    allow-bean-definition-overriding: true
+  autoconfigure:
+    exclude:
+      - springfox.documentation.spring.web.plugins.DocumentationPluginsBootstrapper
 
 ---
 # Railway-specific profile
@@ -72,7 +77,13 @@ management:
     diskspace:
       enabled: false
 
-# Disable Swagger/Springfox to avoid startup issues
+# Completely disable Springfox/Swagger
 springfox:
   documentation:
     enabled: false
+    auto-startup: false
+
+# Disable knife4j as well
+knife4j:
+  enable: false
+  production: true
