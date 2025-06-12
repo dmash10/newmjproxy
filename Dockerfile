@@ -10,8 +10,9 @@ COPY pom.xml .
 # Download dependencies (this layer will be cached if pom.xml doesn't change)
 RUN mvn dependency:go-offline -B
 
-# Copy source code
+# Copy source code and validation script
 COPY src ./src
+COPY validate-env.sh ./validate-env.sh
 
 # Build the application
 RUN mvn clean package -DskipTests -B
@@ -38,21 +39,23 @@ WORKDIR $SPRING_HOME
 # Copy the built JAR from builder stage
 COPY --from=builder /app/target/midjourney-proxy-*.jar ./app.jar
 
+# Copy validation script
+COPY --from=builder /app/validate-env.sh ./validate-env.sh
+
 # Railway uses PORT environment variable
 EXPOSE $PORT
 
-# Optimized JVM settings for Railway
-ENV JAVA_OPTS="-XX:MaxRAMPercentage=75 \
-    -Djava.awt.headless=true \
-    -XX:+UseG1GC \
-    -XX:+UseStringDeduplication \
-    -XX:+OptimizeStringConcat \
-    -Dserver.port=${PORT:-8080} \
-    -Duser.timezone=UTC \
-    -Dspring.profiles.active=railway"
-
-# Health check for Railway
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+# Simple health check for Railway
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=5 \
     CMD curl -f http://localhost:${PORT:-8080}/health || exit 1
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Create startup script with proper variable expansion
+RUN echo '#!/bin/sh' > start.sh && \
+    echo 'chmod +x validate-env.sh' >> start.sh && \
+    echo './validate-env.sh' >> start.sh && \
+    echo 'echo "Starting Midjourney Proxy..."' >> start.sh && \
+    echo 'echo "Java version: $(java -version 2>&1 | head -n 1)"' >> start.sh && \
+    echo 'exec java -XX:MaxRAMPercentage=75 -Djava.awt.headless=true -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+OptimizeStringConcat -Dserver.port=${PORT:-8080} -Duser.timezone=UTC -Dspring.profiles.active=railway -jar app.jar' >> start.sh && \
+    chmod +x start.sh
+
+ENTRYPOINT ["./start.sh"]
