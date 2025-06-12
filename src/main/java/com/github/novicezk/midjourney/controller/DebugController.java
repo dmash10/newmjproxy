@@ -20,6 +20,32 @@ public class DebugController {
     
     private final ProxyProperties properties;
 
+    @GetMapping("/env")
+    public Map<String, Object> debugEnvironment() {
+        Map<String, Object> result = new HashMap<>();
+        
+        // Check environment variables
+        String mjApiSecret = System.getenv("MJ_API_SECRET");
+        String discordGuildId = System.getenv("DISCORD_GUILD_ID");
+        String discordChannelId = System.getenv("DISCORD_CHANNEL_ID");
+        String discordUserToken = System.getenv("DISCORD_USER_TOKEN");
+        
+        result.put("MJ_API_SECRET", mjApiSecret != null ? "[SET]" : "[NOT SET]");
+        result.put("DISCORD_GUILD_ID", discordGuildId != null ? "[SET]" : "[NOT SET]");
+        result.put("DISCORD_CHANNEL_ID", discordChannelId != null ? "[SET]" : "[NOT SET]");
+        result.put("DISCORD_USER_TOKEN", discordUserToken != null ? "[SET]" : "[NOT SET]");
+        
+        // Check configured values from properties
+        result.put("configured_api_secret", properties.getApiSecret() != null ? "[SET]" : "[NOT SET]");
+        result.put("configured_api_secret_length", properties.getApiSecret() != null ? properties.getApiSecret().length() : 0);
+        
+        log.info("🔍 Environment Debug:");
+        log.info("  - MJ_API_SECRET env: {}", mjApiSecret != null ? "[SET]" : "[NOT SET]");
+        log.info("  - Configured API secret: {}", properties.getApiSecret() != null ? "[SET]" : "[NOT SET]");
+        
+        return result;
+    }
+
     @GetMapping("/auth")
     public Map<String, Object> debugAuth(
             HttpServletRequest request,
