@@ -1,5 +1,14 @@
 [phases.setup]
-nixPkgs = ["dotnet-sdk_8"]
+nixPkgs = ['maven', 'temurin-bin-17']
+
+[phases.build]
+cmds = [
+    'mvn clean package -DskipTests -B',
+    'mv target/midjourney-proxy-*.jar app.jar'
+]
+
+[phases.start]
+cmd = 'java $JAVA_OPTS -jar app.jar'
 
 [variables]
-DOTNET_SDK_VERSION = "8.0.100"
+JAVA_OPTS = '-XX:MaxRAMPercentage=75 -Djava.awt.headless=true -XX:+UseG1GC -XX:+UseStringDeduplication -Dserver.port=$PORT -Duser.timezone=UTC -Dspring.profiles.active=railway'
