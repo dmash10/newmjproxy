@@ -1,16 +1,16 @@
 mj:
   # Discord Account Configuration - Use environment variables for security
   accounts:
-    - guild-id: "${DISCORD_GUILD_ID:your_discord_server_id_here}"
-      channel-id: "${DISCORD_CHANNEL_ID:your_discord_channel_id_here}"
-      user-token: "${DISCORD_USER_TOKEN:your_discord_user_token_here}"
+    - guild-id: "${DISCORD_GUILD_ID:}"
+      channel-id: "${DISCORD_CHANNEL_ID:}"
+      user-token: "${DISCORD_USER_TOKEN:}"
       core-size: "${MJ_CORE_SIZE:3}"
       queue-size: "${MJ_QUEUE_SIZE:10}"
       timeout-minutes: "${MJ_TIMEOUT_MINUTES:5}"
       enable: true
   
   # API Security - Use environment variable
-  api-secret: "${MJ_API_SECRET:your_secure_api_secret_here}"
+  api-secret: "${MJ_API_SECRET:midjourneyproxy123}"
   
   # Task Storage
   task-store:
@@ -51,8 +51,8 @@ server:
 # Logging configuration for Railway
 logging:
   level:
-    root: INFO
-    com.github.novicezk: DEBUG
+    root: "${LOGGING_LEVEL_ROOT:INFO}"
+    com.github.novicezk: "${LOGGING_LEVEL_MIDJOURNEY:INFO}"
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
@@ -62,6 +62,7 @@ management:
     web:
       exposure:
         include: health,info,metrics
+      base-path: /actuator
   endpoint:
     health:
       show-details: always
