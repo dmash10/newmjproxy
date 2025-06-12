@@ -1,0 +1,69 @@
+{
+  "name": "Midjourney Proxy",
+  "description": "A proxy service for Midjourney Discord API that provides REST API endpoints for AI image generation",
+  "repository": "https://github.com/dmash10/midjourney-proxy",
+  "services": [
+    {
+      "name": "midjourney-proxy",
+      "source": {
+        "type": "github",
+        "repo": "dmash10/midjourney-proxy",
+        "branch": "main"
+      },
+      "build": {
+        "builder": "DOCKERFILE"
+      },
+      "variables": {
+        "DISCORD_GUILD_ID": {
+          "description": "Your Discord server ID where Midjourney bot is added",
+          "required": true
+        },
+        "DISCORD_CHANNEL_ID": {
+          "description": "Your Discord channel ID where Midjourney commands will be sent",
+          "required": true
+        },
+        "DISCORD_USER_TOKEN": {
+          "description": "Your Discord user token for authentication",
+          "required": true
+        },
+        "MJ_API_SECRET": {
+          "description": "Secret key for API authentication",
+          "required": true,
+          "default": "your-secure-api-secret-here"
+        },
+        "SPRING_PROFILES_ACTIVE": {
+          "description": "Spring Boot active profile",
+          "default": "railway"
+        },
+        "MJ_CORE_SIZE": {
+          "description": "Number of concurrent tasks",
+          "default": "3"
+        },
+        "MJ_QUEUE_SIZE": {
+          "description": "Queue size for pending tasks",
+          "default": "10"
+        },
+        "MJ_TIMEOUT_MINUTES": {
+          "description": "Task timeout in minutes",
+          "default": "5"
+        },
+        "MJ_TASK_STORE_TYPE": {
+          "description": "Task storage type (in_memory or redis)",
+          "default": "in_memory"
+        },
+        "MJ_TRANSLATE_WAY": {
+          "description": "Translation method (null, baidu, or gpt)",
+          "default": "null"
+        }
+      },
+      "healthcheck": {
+        "path": "/health",
+        "timeout": 300
+      }
+    }
+  ],
+  "metadata": {
+    "tags": ["ai", "midjourney", "discord", "api", "image-generation"],
+    "category": "AI/ML"
+  }
+} 

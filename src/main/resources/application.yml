@@ -1,0 +1,70 @@
+mj:
+  # Discord Account Configuration - Use environment variables for security
+  accounts:
+    - guild-id: "${DISCORD_GUILD_ID:your_discord_server_id_here}"
+      channel-id: "${DISCORD_CHANNEL_ID:your_discord_channel_id_here}"
+      user-token: "${DISCORD_USER_TOKEN:your_discord_user_token_here}"
+      core-size: "${MJ_CORE_SIZE:3}"
+      queue-size: "${MJ_QUEUE_SIZE:10}"
+      timeout-minutes: "${MJ_TIMEOUT_MINUTES:5}"
+      enable: true
+  
+  # API Security - Use environment variable
+  api-secret: "${MJ_API_SECRET:your_secure_api_secret_here}"
+  
+  # Task Storage
+  task-store:
+    type: "${MJ_TASK_STORE_TYPE:in_memory}"
+    timeout: "${MJ_TASK_STORE_TIMEOUT:30d}"
+  
+  # Translation settings
+  translate-way: "${MJ_TRANSLATE_WAY:null}"
+  
+  # Notification settings
+  notify-pool-size: "${MJ_NOTIFY_POOL_SIZE:10}"
+
+# Server settings - Railway uses PORT environment variable
+server:
+  port: "${PORT:8080}"
+  
+# Spring settings
+spring:
+  profiles:
+    active: "${SPRING_PROFILES_ACTIVE:railway}"
+
+---
+# Railway-specific profile
+spring:
+  config:
+    activate:
+      on-profile: railway
+
+# Railway optimizations
+server:
+  port: "${PORT:8080}"
+  tomcat:
+    max-threads: 200
+    min-spare-threads: 10
+    connection-timeout: 20000
+    max-connections: 8192
+
+# Logging configuration for Railway
+logging:
+  level:
+    root: INFO
+    com.github.novicezk: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Management endpoints for health checks
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+  health:
+    diskspace:
+      enabled: false
