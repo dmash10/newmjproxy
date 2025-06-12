@@ -9,8 +9,8 @@ mj:
       timeout-minutes: "${MJ_TIMEOUT_MINUTES:5}"
       enable: true
   
-  # API Security - Use environment variable
-  api-secret: "${MJ_API_SECRET:midjourneyproxy123}"
+  # API Security - Hardcoded for Railway deployment
+  api-secret: "midjourneyproxy123"
   
   # Task Storage
   task-store:
