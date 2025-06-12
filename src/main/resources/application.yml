@@ -27,15 +27,12 @@ mj:
 server:
   port: "${PORT:8080}"
   
-# Spring settings - CRITICAL FIX HERE
+# Spring settings
 spring:
   profiles:
     active: "${SPRING_PROFILES_ACTIVE:railway}"
   main:
     allow-bean-definition-overriding: true
-  autoconfigure:
-    exclude:
-      - springfox.documentation.spring.web.plugins.DocumentationPluginsBootstrapper
 
 ---
 # Railway-specific profile
@@ -58,8 +55,6 @@ logging:
   level:
     root: INFO
     com.github.novicezk: INFO
-    springfox: ERROR
-    io.swagger: ERROR
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
@@ -77,13 +72,7 @@ management:
     diskspace:
       enabled: false
 
-# Completely disable Springfox/Swagger
-springfox:
-  documentation:
-    enabled: false
-    auto-startup: false
-
-# Disable knife4j as well
+# Disable knife4j documentation
 knife4j:
   enable: false
   production: true
