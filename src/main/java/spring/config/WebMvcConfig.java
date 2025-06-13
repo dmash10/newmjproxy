@@ -28,7 +28,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		// Serve static files for React admin UI
+		// Serve static files for React admin UI with higher priority
+		registry.addResourceHandler("/static/**", "/*.js", "/*.css", "/*.html", "/*.png", "/*.webp", "/*.ico", "/*.svg")
+				.addResourceLocations("classpath:/static/")
+				.setCachePeriod(3600)
+				.resourceChain(true);
+		
+		// Fallback for any other static resources
 		registry.addResourceHandler("/**")
 				.addResourceLocations("classpath:/static/")
 				.setCachePeriod(3600);
