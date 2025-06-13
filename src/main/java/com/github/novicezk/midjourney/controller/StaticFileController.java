@@ -3,39 +3,36 @@ package com.github.novicezk.midjourney.controller;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @Controller
 public class StaticFileController {
 
     @GetMapping("/**/*.js")
     public ResponseEntity<Resource> serveJavaScript(HttpServletRequest request) {
-        return serveStaticFile(request, MediaType.APPLICATION_JSON); // Use JSON as fallback
+        return serveStaticFile(request, "application/javascript");
     }
 
     @GetMapping("/**/*.css")
     public ResponseEntity<Resource> serveStylesheet(HttpServletRequest request) {
-        return serveStaticFile(request, MediaType.TEXT_CSS);
+        return serveStaticFile(request, "text/css");
     }
 
     @GetMapping("/**/*.html")
     public ResponseEntity<Resource> serveHtml(HttpServletRequest request) {
-        return serveStaticFile(request, MediaType.TEXT_HTML);
+        return serveStaticFile(request, "text/html");
     }
 
     @GetMapping(value = {"/**/*.png", "/**/*.webp", "/**/*.ico"})
     public ResponseEntity<Resource> serveImage(HttpServletRequest request) {
-        return serveStaticFile(request, MediaType.APPLICATION_OCTET_STREAM);
+        return serveStaticFile(request, "image/png");
     }
 
-    private ResponseEntity<Resource> serveStaticFile(HttpServletRequest request, MediaType mediaType) {
+    private ResponseEntity<Resource> serveStaticFile(HttpServletRequest request, String contentType) {
         String path = request.getRequestURI();
         
         // Remove context path if present
@@ -56,8 +53,8 @@ public class StaticFileController {
                 System.out.println("✅ [STATIC] Found file: " + path);
                 
                 HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(mediaType);
-                headers.setCacheControl("no-cache"); // Disable cache for debugging
+                headers.add("Content-Type", contentType);
+                headers.add("Cache-Control", "no-cache");
                 
                 return ResponseEntity.ok()
                         .headers(headers)
