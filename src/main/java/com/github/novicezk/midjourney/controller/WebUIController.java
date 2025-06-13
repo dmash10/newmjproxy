@@ -12,12 +12,7 @@ public class WebUIController {
         return "forward:/index.html";
     }
 
-    @GetMapping("/")
-    public String index() {
-        return "redirect:/admin";
-    }
-
-    // Handle React Router routes
+    // Handle React Router routes - removed conflicting root route
     @RequestMapping(value = {"/admin/**", "/draw", "/task", "/account", "/user", "/setting", "/probe"})
     public String reactRoutes() {
         return "forward:/index.html";
