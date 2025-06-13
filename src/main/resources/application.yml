@@ -35,10 +35,6 @@ spring:
     active: "${SPRING_PROFILES_ACTIVE:railway}"
   main:
     allow-bean-definition-overriding: true
-  # Fix for path mapping patterns
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   # Nuclear CORS Configuration
   web:
     cors:
