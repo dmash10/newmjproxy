@@ -28,8 +28,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		// Let FileController handle all static files
-		// No resource handlers needed
+		// Standard Spring Boot static resource handling
+		registry.addResourceHandler("/**")
+				.addResourceLocations("classpath:/static/")
+				.setCachePeriod(0); // Disable cache for debugging
 	}
 
 	@Override
