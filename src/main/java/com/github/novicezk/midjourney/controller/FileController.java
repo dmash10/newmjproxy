@@ -18,7 +18,8 @@ public class FileController {
     // Regex: matches any path ending with a segment containing at least one character, a dot, and at least one character.
     // This ensures we only catch requests for actual files like name.ext
     // It will not match /admin, /admin/, etc.
-    @RequestMapping(value = "/**/{filename:[^/]+\.[^/]+}")
+    // Corrected regex: \. needs to be \\. in Java string
+    @RequestMapping(value = "/**/{filename:[^/]+\\.[^/]+}")
     public ResponseEntity<byte[]> serveFile(HttpServletRequest request, @PathVariable String filename) {
         String originalRequestPath = request.getRequestURI();
         String pathInStaticDir;
