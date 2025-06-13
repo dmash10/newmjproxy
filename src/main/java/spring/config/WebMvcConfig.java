@@ -11,6 +11,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,8 +27,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	private ProxyProperties properties;
 
 	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		// Serve static files for React admin UI
+		registry.addResourceHandler("/**")
+				.addResourceLocations("classpath:/static/")
+				.setCachePeriod(3600);
+	}
+
+	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
+		// Original API documentation redirect
 		registry.addViewController("/").setViewName("redirect:doc.html");
+		
+		// React Admin UI routes
+		registry.addViewController("/admin").setViewName("forward:/index.html");
+		registry.addViewController("/admin/").setViewName("forward:/index.html");
+		registry.addViewController("/admin/**").setViewName("forward:/index.html");
 	}
 
 	@Override
