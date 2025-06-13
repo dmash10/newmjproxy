@@ -28,10 +28,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		// Simple static file serving
-		registry.addResourceHandler("/**")
-				.addResourceLocations("classpath:/static/")
-				.setCachePeriod(0); // Disable cache for debugging
+		// Let FileController handle all static files
+		// No resource handlers needed
 	}
 
 	@Override
