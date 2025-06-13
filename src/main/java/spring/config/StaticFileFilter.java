@@ -1,7 +1,6 @@
 package spring.config;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 
-@Component
 public class StaticFileFilter implements Filter {
 
     // Patterns for React async chunks that are requested from root
@@ -28,8 +26,12 @@ public class StaticFileFilter implements Filter {
         
         String requestURI = httpRequest.getRequestURI();
         
+        // Log all requests for debugging
+        System.out.println("StaticFileFilter: Processing request: " + requestURI);
+        
         // Check if this is a static file request that should be served from /static
         if (isStaticFileRequest(requestURI)) {
+            System.out.println("StaticFileFilter: Serving static file: " + requestURI);
             serveStaticFile(requestURI, httpResponse);
             return;
         }
